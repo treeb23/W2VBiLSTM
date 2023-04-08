@@ -63,12 +63,6 @@ def setup(): # ランダムシード、Wav2Vecモデル、ファイルパスの�
         print(e)
     print(f"[ファイルパスf_pathを'{f_path}'に設定]")
     t_path=f_path
-
-    
-def trainingmodel(model_name,traindatapath):
-    global t_path
-    t_path=traindatapath
-    save_model(model_name)
     
 
 class ACDataset(Dataset):
@@ -137,26 +131,6 @@ class ACDataset(Dataset):
         return self.userindex[USER]
 
 
-#ユーザーの数   
-alldata= ACDataset()
-train_data = ACDataset() 
-#print(alldata.getindex(0).item())
-for i in range(user): #ACDatasetで作成したデータを読み込んで変数を格納
-    if(i==0):
-        train_data.data = alldata.data[0:int((alldata.getindex(0).item()))]
-        train_data.label = alldata.label[0:int((alldata.getindex(0).item()))]
-        
-    else:
-        train_data.data = torch.cat([train_data.data,alldata.data[int(alldata.getindex(i-1).item()):(int(alldata.getindex(i).item()))]])
-        train_data.label = torch.cat([train_data.label,alldata.label[int(alldata.getindex(i-1).item()):(int(alldata.getindex(i).item()))]])
-
-#import pdb; pdb.set_trace()
-train_dataset = torch.utils.data.TensorDataset(train_data.data,train_data.label) #学習データと正解ラベルを一つにする
-train_loader = DataLoader(train_dataset, batch_size=bs,
-                          shuffle=False, num_workers=0) #bsで分割
-
-    
-
 class SequenceTaggingNet(nn.Module):
     def __init__(self,
                  input_dim=v_size, #入力層のノード数
@@ -213,6 +187,7 @@ def eval_net(net, train_loader, device): #評価用関数
 
   
 def save_model(model_name):
+    global device,loss_f,ALL_lost,net_test,opt,losses,flag_net,model_path
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     loss_f = nn.CrossEntropyLoss()
     ALL_lost=0
@@ -319,6 +294,30 @@ class ACDataset_test(Dataset):
 
         return self.userindex[USER]
 
+      
+def trainingmodel(model_name,traindatapath):
+    global t_path
+    t_path=traindatapath
+    #ユーザーの数   
+    alldata= ACDataset()
+    train_data = ACDataset() 
+    #print(alldata.getindex(0).item())
+    for i in range(user): #ACDatasetで作成したデータを読み込んで変数を格納
+        if(i==0):
+            train_data.data = alldata.data[0:int((alldata.getindex(0).item()))]
+            train_data.label = alldata.label[0:int((alldata.getindex(0).item()))]
+
+        else:
+            train_data.data = torch.cat([train_data.data,alldata.data[int(alldata.getindex(i-1).item()):(int(alldata.getindex(i).item()))]])
+            train_data.label = torch.cat([train_data.label,alldata.label[int(alldata.getindex(i-1).item()):(int(alldata.getindex(i).item()))]])
+
+    #import pdb; pdb.set_trace()
+    train_dataset = torch.utils.data.TensorDataset(train_data.data,train_data.label) #学習データと正解ラベルを一つにする
+    train_loader = DataLoader(train_dataset, batch_size=bs,
+                              shuffle=False, num_workers=0) #bsで分割
+    save_model(model_name)
+      
+      
 def test(model_name,maxcount,testdatapath): #maxcountはJPのファイル数
     load_model(model_name)
     global t_path,maxc
