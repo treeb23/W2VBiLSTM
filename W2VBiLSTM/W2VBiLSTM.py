@@ -19,6 +19,16 @@ import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
 
+user = 2 #2クラスにわける
+lr = 0.0001 #learning rate 学習の重みの変化
+v_size = 768 #wave2vecから出力されるベクトルのサイズ
+epoch =30 #学習回数
+bs = 190000 #データの最大サイズ
+hiddensize =128 #ネットワークの中間層のノード数
+dropout=0.3 #出力層に出力しない割合　過学習を防ぐため
+layer=1 #中間層の層の数
+filenames=['jpn','us'] #ファイルの名前の共通部分
+file_nums=[130,55] #ファイルの数
 
 def setup(): # ファイルパスの設定
     np.random.seed(1)
@@ -26,17 +36,8 @@ def setup(): # ファイルパスの設定
     torch.cuda.manual_seed(1)
     torch.manual_seed(1)
     random.seed(1)
-    global user,lr,v_size,epoch,bs,hiddensize,dropout,layer,filenames,file_nums,processor,model,f_path,t_path
-    user = 2 #2クラスにわける
-    lr = 0.0001 #learning rate 学習の重みの変化
-    v_size = 768 #wave2vecから出力されるベクトルのサイズ
-    epoch =30 #学習回数
-    bs = 190000 #データの最大サイズ
-    hiddensize =128 #ネットワークの中間層のノード数
-    dropout=0.3 #出力層に出力しない割合　過学習を防ぐため
-    layer=1 #中間層の層の数
-    filenames=['jpn','us'] #ファイルの名前の共通部分
-    file_nums=[130,55] #ファイルの数
+    global processor,model,f_path,t_path
+    
     #import pdb; pdb.set_trace()
 
     processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
