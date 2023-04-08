@@ -47,7 +47,6 @@ import time
 import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
-from openpyxl import Workbook, load_workbook
 ```
 このライブラリをインストールしてインポート
 ```
