@@ -12,8 +12,9 @@ lab/
 　│ 　 └ ().pth
 　└ data/
 　 　└ 短文音声/
-    　 └ test/
-         └ thiswas/
+    　 ├ test/
+    　 │ └ thiswas/
+    　 └ training/
 ```
 ## trainingの方法
 
