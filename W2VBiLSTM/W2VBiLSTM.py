@@ -31,11 +31,12 @@ filenames=['jpn','us'] #ファイルの名前の共通部分
 file_nums=[130,55] #ファイルの数
 
 
-def set_param(learningrate=0.0001,epochnum=20,bsize=156530,filenums=[130,55]):
-    global lr,epoch,bs,file_nums
+def set_param(learningrate=0.0001,epochnum=20,bsize=156530,filename=['jpn','us'],filenums=[130,55]):
+    global lr,epoch,bs,filenames,file_nums
     lr=learningrate
     epoch=epochnum
     bs=bsize
+    filenames=filename
     file_nums=filenums
     
 
@@ -79,7 +80,7 @@ class ACDataset(Dataset):
             w=0
             wav_paths=[]
             for i in range(file_nums[USER]): #実際に入力データのパスを格納する
-                wav_path=glob.glob(f'{f_path}/data/短文音声/training/{t_path}/{filenames[USER]}_{i+1}.wav')
+                wav_path=glob.glob(f'{f_path}/data/短文音声/training/{t_path}/{filenames[USER]}_{i}.wav')
                 wav_paths.append(wav_path)
             for x in wav_paths: #実際にデータを読み込んで正解ラベルを生成する
                 _,data_x = scipy.io.wavfile.read(x[0]) #wavファイルを読み込む
