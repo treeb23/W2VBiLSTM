@@ -185,6 +185,65 @@ def eval_net(net, train_loader, device): #評価用関数
     acc = correct / uncleSum #正解率
     return acc,loss,tmp
 
+
+def crossvalidation(): #クロスバリデーション用のセル
+    N = 1 
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    loss_f = nn.CrossEntropyLoss() #誤差関数の設定
+    LenX=len(train_loader) #入力データ全体の個数（ファイル数の合計）
+    print(len(train_loader))
+
+    ALL_lost=0 #最終的な誤差関数の値を格納する変数
+    ALL_trainacc=0 #trainデータでテストした結果を格納する
+    ALL_valacc =0 #testデータでテストした結果を格納する
+    for i in range(37,0,-1): #くろすばりでーしょんで何分割するか決める
+        if(LenX%i==0):
+            splits=int(i)
+            print(i)
+            break
+        elif(i == 1):
+            splits=1
+            break
+    fold = KFold(n_splits=splits, shuffle=False) #実際の分割数を入れる
+    print(splits,"分割")
+
+
+    for fold_idx, (train_idx, valid_idx) in enumerate(fold.split(train_data.data, train_data.label)):
+        train_loader = DataLoader(Subset(train_dataset, train_idx), shuffle=False, batch_size=bs)
+        valid_loader = DataLoader(Subset(train_dataset, valid_idx), shuffle=False, batch_size=bs)
+        net = SequenceTaggingNet() #ネットワークの読み込み
+        net.to(device)
+        opt = optim.Adam(net.parameters(),lr) #最適化関数の設定
+        losses = []
+        for t in tqdm(range(epoch)): 
+            net.train() #ネットワークを学習用モードに
+            flag_t=0
+            for (a,b) in train_loader: #学習
+                b = b[0]
+                x = a.to(device)
+                y = b.to(device)
+                opt.zero_grad()
+                y_pred = net(x) #ネットワークにデータを入力
+                y = torch.argmax(y,dim=1) #正解ラベルにおける1の場所を確認
+                loss = loss_f(y_pred, y.long()) #誤差関数の値を調べる
+                losses.append(loss.item()) #誤差関数の値を保存
+                loss.backward() #逆伝搬処理
+                opt.step()
+            #print(mean(losses))
+        train_acc,_ ,_2= eval_net(net, train_loader, device) #testデータを使ってモデルの正解率を取得（過去問でモデルを評価）
+       # import pdb; pdb.set_trace()
+        val_acc,_ ,softmax_result= eval_net(net, valid_loader, device) #未知のデータでモデルを評価
+        print("Kval",N,"回目", mean(losses),",", train_acc,"," ,val_acc,",",softmax_result) #何分割目か、誤差関数、学習用データを使った正解率、検証用データを使った正解率を表示
+        N +=1
+        ALL_lost+=mean(losses)
+        ALL_trainacc+=train_acc
+        ALL_valacc += val_acc
+    ALL_lost = ALL_lost/fold.n_splits #全体の誤差関数
+    ALL_trainacc = ALL_trainacc/fold.n_splits #全体の誤差関数
+    ALL_valacc = ALL_valacc/fold.n_splits 
+    print("ALL_lost=",ALL_lost)
+    print("All_train_acc=",ALL_trainacc,"all_valacc=",ALL_valacc)
+
   
 def save_model(model_name):
     global device,loss_f,ALL_lost,net_test,opt,losses,flag_net,model_path
