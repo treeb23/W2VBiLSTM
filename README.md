@@ -84,6 +84,8 @@ import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
 #from torchinfo import summary
+import pydub
+from pydub import AudioSegment
 ```
 このライブラリをインストールしてインポート
 ```py
