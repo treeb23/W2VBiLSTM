@@ -77,7 +77,7 @@ import time
 import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
-from torchinfo import summary
+#from torchinfo import summary
 ```
 このライブラリをインストールしてインポート
 ```py
