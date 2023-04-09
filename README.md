@@ -113,3 +113,12 @@ wb.trainingmodel("model_4","thiswas5")
 wb.set_param()
 wb.test("LSTM_01",15,"thiswas")
 ```
+
+## その他の機能
+
+### 音声ファイルの音量を変えた音声を用意する
+
+`wavpath`に変換したい音声、`outwavpath`に変換先の音声をおくディレクトリ名、`filename`にはファイル名の連番の番号を除く共通部分、`kdb`には変更する音量(dB単位)、`filenum`には変換したいファイルの総数、`startnum`には連番の始まりの値(大抵0か1)を入力する
+```py
+wb.dbchange_wav(wavpath="短文音声/test/thiswas",outwavpath="短文音声/test/thiswas/置換",filename="jp_",kdb=0,filenum=1,startnum=0)
+```
