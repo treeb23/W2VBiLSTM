@@ -58,6 +58,7 @@ wb.search_bs(wavepath)
 !pip install transformers
 !pip install scikit-learn
 !pip install torchinfo
+!pip install pydub
 ```
 インポート
 ```py
