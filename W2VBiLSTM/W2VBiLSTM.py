@@ -18,6 +18,8 @@ from tqdm import tqdm
 import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
+import pydub
+from pydub import AudioSegment
 #from torchinfo import summary
 
 user = 2 #2クラスにわける
@@ -441,4 +443,18 @@ def search_bs(wavepath): #ディレクトリ内の.wavの最大bsを出力
         elif len(data_x)>a:
             a = len(data_x)
     print(a)
+    
+    
+def dbchange_wav(wavpath="短文音声/test/thiswas",outwavpath="短文音声/test/thiswas/置換",filename="jp_",kdb=0,filenum=1,startnum=0):
+    #.wavの音量を変えた音声を作成
+    for i in range(startnum,filenum+startnum):
+        audio_path = f'{f_path}/data/{wavpath}/{filename}{i}.wav'
+        out_audio_path = f'{f_path}/data/{outwavpath}/{filename}{i}.wav'
+        sourceAudio = AudioSegment.from_wav(audio_path)
+        # 音量を変える(dB単位)
+        processedAudio = sourceAudio + kdb
+        # 結果を出力
+        processedAudio.export(out_audio_path, format="wav")
+        #print(f"max_dBFSを{sourceAudio.max_dBFS}から{processedAudio.max_dBFS}に変更しました。")
+
     
