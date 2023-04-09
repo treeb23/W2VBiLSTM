@@ -430,7 +430,7 @@ def test(model_name,maxcount,testdatapath): #maxcountはJPのファイル数
 
             
 def search_bs(wavepath): #ディレクトリ内の.wavの最大bsを出力
-    wav_path=glob.glob(f'{f_path}/data/短文音声/test/{wavepath}/*.wav')
+    wav_path=glob.glob(f'{f_path}/data/短文音声/{wavepath}/*.wav')
     print(wav_path)
     flag = 0
     for x in wav_path:
