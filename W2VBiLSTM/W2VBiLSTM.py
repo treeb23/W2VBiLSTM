@@ -18,7 +18,7 @@ from tqdm import tqdm
 import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
-from torchinfo import summary
+#from torchinfo import summary
 
 user = 2 #2クラスにわける
 lr = 0.0001 #learning rate 学習の重みの変化
@@ -284,7 +284,7 @@ def load_model(model_name):
     ALL_lost=0
     net_test = SequenceTaggingNet()
     net_test.to(device)
-    summary(net_test, input_size=(bs,v_size,1,768))
+    #summary(net_test, input_size=(bs,v_size,1,768))
     opt = optim.Adam(net_test.parameters(),lr)
     model_path = f"{f_path}/code/save_model/{model_name}.pth" # モデル保存先パス
     net_test.load_state_dict(torch.load(model_path, map_location=device))
