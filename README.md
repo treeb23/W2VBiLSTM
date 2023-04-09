@@ -52,6 +52,7 @@ wb.set_param()でファイル名に合わせて`filename`を変更する(test時
 ```py
 !pip install transformers
 !pip install scikit-learn
+!pip install torchinfo
 ```
 インポート
 ```py
@@ -76,6 +77,7 @@ import time
 import glob
 import scipy.io.wavfile
 from transformers import Wav2Vec2Processor, Wav2Vec2Model
+from torchinfo import summary
 ```
 このライブラリをインストールしてインポート
 ```py
