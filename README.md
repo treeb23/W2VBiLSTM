@@ -28,7 +28,12 @@ wb.set_param()でファイル名に合わせて`filename`を変更する(test時
 
 音声のファイル名に振る連続する整数は0から始める。
 
+(参考)bsの調べ方
 
+```py
+wavepath="test/thiswas"
+wb.search_bs(wavepath)
+```
 
 ## testの方法
 
@@ -88,6 +93,13 @@ import W2VBiLSTM as wb
 ```py
 wb.setup()
 ```
+GPUが利用できるかを確認しておく
+```py
+print(torch.cuda.is_available()) # GPUを使用できるか
+if torch.cuda.is_available() != False:
+    print(torch.cuda.current_device())
+```
+
 モデルを学習するには`set_param()`で必要に応じてパラメータを変更し、保存するmodelの名前と学習に使用する音声のあるディレクトリ名を`trainingmodel()`の引数に入力する
 ```py
 wb.set_param(filename=['jpn','US'])
