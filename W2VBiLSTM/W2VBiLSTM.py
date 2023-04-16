@@ -411,7 +411,6 @@ def test(model_name,maxcount,testdatapath): #maxcountはJPのファイル数
 
     val_acc,_ ,softmax_result= eval_net(net_test, train_loader_test, device)
     print(model_name,"での正解率",val_acc*100,"%")
-    print("各音声ごとに次のような形式で出力されます : [ノンネイティブ率 ネイティブ率]")
 
     #x=[-0.1761,0.1189]
     def softmax(x):
