@@ -14,6 +14,7 @@ import sklearn
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import KFold
 import random
+import wave
 from tqdm import tqdm
 import glob
 import scipy.io.wavfile
@@ -422,13 +423,24 @@ def test(model_name,maxcount,testdatapath): #maxcountはJPのファイル数
     #softmax(x)
 
     count=0
+    cols = ["label","native","wav_len","wav_name"]
+    df = pd.DataFrame(index=[], columns=cols)
+    j=0
 
-    print("ここからJP")
     for i in softmax_result:
-        print(softmax([i[0][0],i[0][1]])*100)
+        label=filenames[j]
+        native=softmax([i[0][0],i[0][1]])[1]*100
+        wav_path=f'{f_path}/data/短文音声/test/{t_path}/{filenames[j]}_{count+1-maxcount*j}.wav'
+        wav_name=f"/test/{t_path}/{filenames[j]}_{count+1-maxcount*j}.wav"
+        with wave.open(wav_path, "rb") as wr:
+            wav_len=wr.getparams()[3]/wr.getparams()[2]
+        data = [label, native, wav_len, wav_name]
+        record = pd.Series(data, index=df.columns)
+        df.loc[len(df)] = record
         count=count+1
         if count==maxcount:
-            print("ここからUS")
+            j=1
+    return df
 
             
 def search_bs(wavepath): #ディレクトリ内の.wavの最大bsを出力
