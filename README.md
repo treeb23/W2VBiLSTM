@@ -62,33 +62,7 @@ wb.search_bs(wavepath)
 !pip install torchinfo
 !pip install pydub
 ```
-インポート
-```py
-import numpy as np
-import torch
-from statistics import mean
-from torch import nn, optim
-from torch.utils.data import (Dataset,
-                              DataLoader,
-                              TensorDataset)
-import tqdm
-import pandas as pd
-#import pytorch_lightning as pl
-from torch.utils.data import DataLoader, Dataset, Subset
-#from torchvision.models import resnet50
-import sklearn
-from sklearn.datasets import fetch_openml
-from sklearn.model_selection import KFold
-import random
-from tqdm import tqdm
-import time
-import glob
-import scipy.io.wavfile
-from transformers import Wav2Vec2Processor, Wav2Vec2Model
-#from torchinfo import summary
-import pydub
-from pydub import AudioSegment
-```
+
 このライブラリをインストールしてインポート
 ```py
 !pip install git+https://github.com/treeb23/W2VBiLSTM.git
